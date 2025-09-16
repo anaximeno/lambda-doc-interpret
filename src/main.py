@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from mangum import Mangum
 
-from routes import test
+from routes import extract
 
 app = FastAPI()
-app.include_router(test.router)
+app.include_router(extract.router)
 
 lambda_handler = Mangum(app)
