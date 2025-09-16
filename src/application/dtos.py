@@ -1,12 +1,12 @@
 from pydantic import BaseModel
 
 
-class ExtractInfoDTO(BaseModel):
+class ExtractionInfoDTO(BaseModel):
     pdf_url: str
     case_id: str
 
 
-class DocummentTimelineDTO(BaseModel):
+class DocumentTimelineDTO(BaseModel):
     event_id: int
     event_name: str
     event_description: str
@@ -15,7 +15,7 @@ class DocummentTimelineDTO(BaseModel):
     event_page_end: int
     
     
-class DocummentEvidenceDTO(BaseModel):
+class DocumentEvidenceDTO(BaseModel):
     evidence_id: int
     evidence_name: str
     evidence_flaw: str | None
@@ -23,9 +23,9 @@ class DocummentEvidenceDTO(BaseModel):
     evidence_page_end: int
 
 
-class DocummentExtractionDTO(BaseModel):
+class DocumentExtractionDTO(BaseModel):
     case_id: str
     resume: str
-    timeline: list[DocummentTimelineDTO]
-    evidence: list[DocummentEvidenceDTO]
+    timeline: list[DocumentTimelineDTO]
+    evidence: list[DocumentEvidenceDTO]
     persisted_at: str
