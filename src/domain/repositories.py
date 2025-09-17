@@ -32,7 +32,21 @@ class CaseExtractionRepository:
 
         return None
     
-    def get_caset(self, case_id) -> DocumentExtractionDTO | None:
-        pass # TODO
+    def get_last_case_record(self, case_id) -> DocumentExtractionDTO | None:
+        query_result = query_result = self._db_client.query(
+                "SELECT (id, case_id, contents, persisted_at) FROM document_extractions "
+                " WHERE case_id = %(case_id)s ORDER BY persisted_at DESC;",
+                {"case_id": case_id})
+        if len(query_result) > 0:
+            case_data = query_result[0][0]
+            case_id = case_data[1]
+            contents = json.loads(case_data[2])
+            persisted_at = case_data[3]
+            return DocumentExtractionDTO(
+                case_id=case_id,
+                persisted_at=persisted_at,
+                **contents
+            )
+        return None
 
         

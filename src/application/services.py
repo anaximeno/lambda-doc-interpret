@@ -57,6 +57,9 @@ class DocumentExtractionService:
     def save_case_extraction(self, case_id: str, contents: object | dict) -> DocumentExtractionDTO | None:
         return self._case_extraction_repo.create_case(case_id, json.dumps(contents))
 
+    def get_extracted_case(self, case_id: str) -> DocumentExtractionDTO | None:
+        return self._case_extraction_repo.get_last_case_record(case_id)
+
     def _get_upload_file(self, file_url: str) -> io.BytesIO: 
         doc_io = io.BytesIO(httpx.get(file_url).content)
         upload_file = self._gemini_client.files.upload(
