@@ -3,3 +3,5 @@ mangum
 pydantic
 google-genai
 httpx
+psycopg
+psycopg-binary

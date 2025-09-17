@@ -1,4 +1,5 @@
 from application.dtos import DocumentExtractionDTO
+from domain.repositories import CaseExtractionRepository
 from configs.settings import Settings
 from google import genai
 from google.genai import types
@@ -41,6 +42,7 @@ como demonstrado."""
 class DocumentExtractionService:
     def __init__(self) -> None:
         self._gemini_client = genai.Client(api_key=Settings.GOOGLE_API_KEY)
+        self._case_extraction_repo = CaseExtractionRepository()
 
     def extract_contents(self, file_url: str, case_id: str) -> object:
         upload_file = self._get_upload_file(file_url)
@@ -50,8 +52,11 @@ class DocumentExtractionService:
             config={"response_mime_type": "application/json", "temperature": 0.3,
                     "system_instruction": "Seja preciso e inclua todos os dados relevantes."})
         contents = json.loads(response.text)
-        return DocumentExtractionDTO(case_id=case_id, persisted_at='1990-09-09', **contents)
-    
+        return contents
+
+    def save_case_extraction(self, case_id: str, contents: object | dict) -> DocumentExtractionDTO | None:
+        return self._case_extraction_repo.create_case(case_id, json.dumps(contents))
+
     def _get_upload_file(self, file_url: str) -> io.BytesIO: 
         doc_io = io.BytesIO(httpx.get(file_url).content)
         upload_file = self._gemini_client.files.upload(
