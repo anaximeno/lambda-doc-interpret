@@ -7,10 +7,11 @@ router = APIRouter(prefix="/extract")
 extraction_service = DocumentExtractionService()
 
 @router.post("")
-async def extract(body: ExtractionInfoDTO) -> DocumentExtractionDTO:
+async def extract(body: ExtractionInfoDTO):
     extracted_contents = extraction_service.extract_contents(body.pdf_url, body.case_id)
     document_extraction = extraction_service.save_case_extraction(body.case_id, extracted_contents)
-    return document_extraction
+    data = document_extraction.model_dump_json()
+    return data
 
 
 __all__ = ["router"]
